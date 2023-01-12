@@ -71,13 +71,33 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    const newPerson = {
-        id: Math.floor(Math.random() * 100),
-        name: body.name,
-        number: body.number,
+
+    if (body.name && body.number){
+        const existingName = persons.find((person)=> person.name === body.name)
+        const existingNumber = persons.find((person)=> person.number === body.number)
+        if (existingName){
+            response.status(404).json({ 
+                error: 'the name already exists' 
+              })
+        } else if (existingNumber){
+            response.status(404).json({ 
+                error: 'the number already exists' 
+              })
+        } else{
+
+            const newPerson = {
+                id: Math.floor(Math.random() * 100),
+                name: body.name,
+                number: body.number,
+            }
+            persons = persons.concat(newPerson)
+            response.status(204).end()
+        }
+    } else {
+        response.status(404).json({ 
+            error: 'name or number missing' 
+          })
     }
-    persons = persons.concat(newPerson)
-    response.status(204).end()
 
 })
 
