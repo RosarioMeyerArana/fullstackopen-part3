@@ -35,11 +35,22 @@ app.get('/info', (request, response) => {
     <h3>Phonebook has info for ${persons.length} people</h3>
     <p>${new Date()}</p>
     </div>`)
-  })
+})
 
 app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
+
+app.get('/api/persons/:id', (request, response) => {
+    const personId = Number(request.params.id)
+
+    const foundPerson = persons.find((person) => person.id === personId)
+    if(foundPerson){
+        response.json(foundPerson)
+    } else{
+        response.status(404).end()
+    }
+  })
 
 const PORT = 3001
 app.listen(PORT, () => {
