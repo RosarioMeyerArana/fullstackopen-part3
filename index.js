@@ -77,6 +77,8 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     }
     persons = persons.concat(newPerson)
+    response.status(204).end()
+
 })
 
 const PORT = 3001
