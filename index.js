@@ -48,7 +48,9 @@ app.get('/api/persons/:id', (request, response) => {
     if(foundPerson){
         response.json(foundPerson)
     } else{
-        response.status(404).end()
+        response.status(404).json({ 
+            error: 'the person does not exist' 
+          })
     }
 })
 
@@ -61,8 +63,20 @@ app.delete('/api/persons/:id', (request, response) => {
         persons = persons.filter((person) => person.id !== personId)
         response.status(204).end()
     } else{
-        response.status(404).end()
+        response.status(404).json({ 
+            error: 'content missing' 
+          })
     }
+})
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    const newPerson = {
+        id: Math.floor(Math.random() * 100),
+        name: body.name,
+        number: body.number,
+    }
+    persons = persons.concat(newPerson)
 })
 
 const PORT = 3001
