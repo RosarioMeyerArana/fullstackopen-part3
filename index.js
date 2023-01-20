@@ -3,7 +3,9 @@ const app = express()
 const morgan = require('morgan')
 
 app.use(express.json())
-app.use(morgan('tiny'))
+// app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
 
 let persons = [
         { 
@@ -93,15 +95,16 @@ app.post('/api/persons', (request, response) => {
                 number: body.number,
             }
             persons = persons.concat(newPerson)
-            response.status(204).end()
+            response.json(newPerson)
         }
     } else {
         response.status(404).json({ 
             error: 'name or number missing' 
           })
     }
-
+    morgan.token("body", (req, res) => JSON.stringify(req.body));
 })
+
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
