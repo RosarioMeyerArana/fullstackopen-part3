@@ -6,7 +6,8 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
-// app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+morgan.token('body', (req, res) => JSON.stringify(req.body));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
 let persons = [
@@ -90,9 +91,9 @@ app.post('/api/persons', (request, response) => {
                 error: 'the number already exists' 
               })
         } else{
-
+          const newid = Math.floor(Math.random() * 100)
             const newPerson = {
-                id: Math.floor(Math.random() * 100),
+                id: newid,
                 name: body.name,
                 number: body.number,
             }
@@ -104,7 +105,6 @@ app.post('/api/persons', (request, response) => {
             error: 'name or number missing' 
           })
     }
-    // morgan.token('body', (req, res) => JSON.stringify(req.body));
 })
 
 
