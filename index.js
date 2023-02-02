@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+
 const Person = require('./models/person')
 
 app.use(cors())
@@ -49,15 +50,12 @@ app.get('/info', (request, response) => {
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((res) => {
     response.json(res)
-    mongoose.connection.close()
   })
-
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const personId = Number(request.params.id)
-
-    const foundPerson = persons.find((person) => person.id === personId)
+  const personId = Number(request.params.id)
+  const foundPerson = persons.find((person) => person.id === personId)
     if(foundPerson){
         response.json(foundPerson)
     } else{
@@ -86,26 +84,16 @@ app.post('/api/persons', (request, response) => {
     const body = request.body
 
     if (body.name && body.number){
-        const existingName = persons.find((person)=> person.name === body.name)
-        const existingNumber = persons.find((person)=> person.number === body.number)
-        if (existingName){
-            response.status(404).json({ 
-                error: 'the name already exists' 
-              })
-        } else if (existingNumber){
-            response.status(404).json({ 
-                error: 'the number already exists' 
-              })
-        } else{
-          const newid = Math.floor(Math.random() * 100)
-            const newPerson = {
-                id: newid,
-                name: body.name,
-                number: body.number,
-            }
-            persons = persons.concat(newPerson)
-            response.json(newPerson)
-        }
+
+      const newPerson = new Person({
+        name: body.name,
+        number: body.number,
+      })
+  
+      newPerson.save().then((res) => {
+        response.json(res)
+      })
+  
     } else {
         response.status(404).json({ 
             error: 'name or number missing' 
