@@ -54,30 +54,29 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const personId = Number(request.params.id)
-  const foundPerson = persons.find((person) => person.id === personId)
-    if(foundPerson){
-        response.json(foundPerson)
-    } else{
-        response.status(404).json({ 
-            error: 'the person does not exist' 
-          })
+
+  Person.findById(request.params.id)
+  .then((pers) => {
+    if(pers) {
+      response.json(pers)
+    } else {
+      response.status(404).send({
+        error: 'this id does not exists'
+      })
     }
+  })
+  .catch((err) => {
+    response.status(400).send({ error: 'malformatted id' })
+  })
+
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const personId = Number(request.params.id)
-
-    const foundPerson = persons.find((person) => person.id === personId)
-
-    if(foundPerson){
-        persons = persons.filter((person) => person.id !== personId)
-        response.status(204).end()
-    } else{
-        response.status(404).json({ 
-            error: 'content missing' 
-          })
-    }
+    Person.findByIdAndRemove(request.params.id)
+    .then((res) => response.status(204).end())
+    .catch((err) =>  response.status(400).send({ 
+      error: 'malformatted id' 
+    }))
 })
 
 app.post('/api/persons', (request, response) => {
