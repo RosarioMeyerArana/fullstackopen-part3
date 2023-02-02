@@ -49,7 +49,9 @@ app.get('/info', (request, response) => {
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((res) => {
     response.json(res)
+    mongoose.connection.close()
   })
+
 })
 
 app.get('/api/persons/:id', (request, response) => {
