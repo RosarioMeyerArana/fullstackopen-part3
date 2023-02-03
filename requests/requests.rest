@@ -11,3 +11,11 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3001/api/persons/63da7f8ac0462f79b79bed29
+
+###
+PUT http://localhost:3001/api/persons/63da7baa065d2cd1586e6243
+Content-Type: application/json
+
+{
+    "number": "67999033455"
+}
