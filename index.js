@@ -33,7 +33,6 @@ app.get('/', (request, response) => {
 
 app.get('/info', (request, response) => {
   Person.find({}).then((res) => {
-    console.log(res.length)
     response.send(`<div> 
     <h3>Phonebook has info for ${res.length} people</h3>
     <p>${new Date()}</p>
