@@ -98,7 +98,7 @@ app.post('/api/persons', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const newNumber = request.body
 
-  Person.findOneAndUpdate({_id: request.params.id}, newNumber, {new: true})
+  Person.findOneAndUpdate({_id: request.params.id}, newNumber, {new: true, runValidators: true, context: 'query'})
   .then((res) => {
     response.json(res)
   })

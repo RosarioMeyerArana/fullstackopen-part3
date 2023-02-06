@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
     "name": "Rosario",
-    "number": "67999033455"
+    "number": "67999"
 }
 
 ###
